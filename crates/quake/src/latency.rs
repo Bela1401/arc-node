@@ -169,6 +169,12 @@ fn generate_tc_script(
 
     script.push_str("set -e\n\n");
 
+    script.push_str("# WSL2 kernels can lack the qdisc modules needed by tc/netem.\n");
+    script.push_str("if grep -qiE '(microsoft|wsl)' /proc/version /proc/sys/kernel/osrelease 2> /dev/null; then\n");
+    script.push_str("  echo \"WSL2 kernel detected; skipping latency emulation because tc qdisc modules may be unavailable.\"\n");
+    script.push_str("  exit 0\n");
+    script.push_str("fi\n\n");
+
     // Install iproute2 and iptables if ip or tc commands are missing (e.g. release images)
     script.push_str("if [ -f /etc/debian_version ] && ! which ip tc > /dev/null; then\n");
     script.push_str("  (apt-get update -qq && apt-get install -y -qq --no-install-recommends iproute2 iptables) >/dev/null 2>&1\n");

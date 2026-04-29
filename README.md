@@ -151,6 +151,8 @@ Launch a full local testnet with 5 execution nodes, 5 consensus nodes, plus Prom
 make testnet
 ```
 
+On WSL2, Quake skips `tc` latency emulation automatically because WSL2 kernels can lack the qdisc modules required by `tc netem`.
+
 **Note:** If your development environment requires installing custom CA certificates, you can add them to the `deployments/certs` directory. They must be PEM-encoded and have a `.crt` extension. They will be automatically installed into the Docker images at build time.
 
 To export a certificate from your system's keychain (macOS):
